@@ -96,3 +96,17 @@ class SweetShop:
 
         # Deduct purchased quantity
         sweet.quantity_in_stock -= quantity
+
+
+
+    def restock_sweet(self, sweet_id: int, quantity: int):
+        """
+        Increase the quantity_in_stock of a sweet by restocking.
+        """
+        # Find sweet by ID
+        sweet = next((s for s in self._inventory if s.id == sweet_id), None)
+        if sweet is None:
+            raise ValueError(f"Sweet with ID {sweet_id} not found.")
+
+        # Increase stock quantity
+        sweet.quantity_in_stock += quantity
