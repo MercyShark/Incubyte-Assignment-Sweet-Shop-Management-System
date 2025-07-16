@@ -162,5 +162,27 @@ class TestSweetShop_PurchaseSweets(unittest.TestCase):
         with self.assertRaises(InsufficientStockError):
             self.shop.purchase_sweet(sweet_id=1001, quantity=25)
 
+
+
+class TestSweetShop_RestockSweets(unittest.TestCase):
+    def setUp(self):
+        self.shop = SweetShop()
+        self.sweet = Sweet(id=1001, name="Kaju Katli", category="Nut-Based", price=50, quantity_in_stock=20)
+        self.shop.add_sweet(self.sweet)
+
+    def test_successful_restock_increases_quantity(self):
+        """
+        Test that restocking sweets increases the quantity_in_stock correctly.
+        """
+        self.shop.restock_sweet(sweet_id=1001, quantity=10)
+        self.assertEqual(self.sweet.quantity_in_stock, 30)
+
+    def test_restock_invalid_sweet_raises_error(self):
+        """
+        Test that restocking a non-existent sweet raises a ValueError.
+        """
+        with self.assertRaises(ValueError):
+            self.shop.restock_sweet(sweet_id=9999, quantity=5)
+
 if __name__ == "__main__":
     unittest.main()
