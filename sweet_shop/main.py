@@ -1,7 +1,8 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Form, Request
 from fastapi.templating import Jinja2Templates
-from sweets.shop import SweetShop
+from sweets.shop import SweetShop, InsufficientStockError
 from sweets.models import Sweet
+from fastapi.responses import RedirectResponse
 
 app = FastAPI()
 
@@ -21,6 +22,55 @@ def read_sweets(request: Request, sort_by: str = None, ascending: bool = True):
     else:
         sweets = shop.get_all_sweets()
     return templates.TemplateResponse("index.html", {"request": request, "sweets": sweets})
+
+@app.get("/add")
+def add_sweet_form(request: Request):
+    return templates.TemplateResponse("add.html", {"request": request})
+
+
+@app.post("/add")
+def add_sweet(
+    request: Request,
+    id: int = Form(...),
+    name: str = Form(...),
+    category: str = Form(...),
+    price: float = Form(...),
+    quantity: int = Form(...)
+):
+    try:
+        sweet = Sweet(id=id, name=name, category=category, price=price, quantity_in_stock=quantity)
+        shop.add_sweet(sweet)
+        return RedirectResponse(url="/", status_code=303)
+    except Exception as e:
+        return templates.TemplateResponse("add.html", {"request": request, "error": str(e)})
+
+
+@app.get("/delete/{sweet_id}")
+def delete_sweet(sweet_id: int):
+    try:
+        shop.delete_sweet(sweet_id)
+    except Exception:
+        pass  # ignore errors for now
+    return RedirectResponse(url="/", status_code=303)
+
+
+@app.post("/purchase/{sweet_id}")
+def purchase_sweet(sweet_id: int, quantity: int = Form(...)):
+    try:
+        shop.purchase_sweet(sweet_id, quantity)
+    except InsufficientStockError as e:
+        # For simplicity, ignoring error display here; you can extend
+        pass
+    return RedirectResponse(url="/", status_code=303)
+
+
+@app.post("/restock/{sweet_id}")
+def restock_sweet(sweet_id: int, quantity: int = Form(...)):
+    try:
+        shop.restock_sweet(sweet_id, quantity)
+    except Exception:
+        pass
+    return RedirectResponse(url="/", status_code=303)
 
 
 if __name__ == "__main__":
