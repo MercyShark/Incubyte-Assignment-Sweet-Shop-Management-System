@@ -108,5 +108,37 @@ class TestSweetShop_SearchSweets(unittest.TestCase):
         found_names = sorted([sweet.name for sweet in results])
         self.assertListEqual(found_names, ["Gajar Halwa", "Gulab Jamun"])
 
+
+
+
+class TestSweetShop_SortSweets(unittest.TestCase):
+    def setUp(self):
+        """
+        Test for sorting sweets by different attributes:
+        - By name in ascending order
+        - By price in descending order
+        - By quantity in ascending order
+        """
+        
+        self.shop = SweetShop()
+        self.shop.add_sweet(Sweet(id=1001, name="Kaju Katli", category="Nut-Based", price=50, quantity_in_stock=20))
+        self.shop.add_sweet(Sweet(id=1002, name="Gajar Halwa", category="VegetableBased", price=30, quantity_in_stock=15))
+        self.shop.add_sweet(Sweet(id=1003, name="Gulab Jamun", category="Milk-Based", price=10, quantity_in_stock=50))
+
+    def test_sort_by_name_ascending(self):
+        sweets = self.shop.sort_sweets(sort_by="name", ascending=True)
+        names = [sweet.name for sweet in sweets]
+        self.assertListEqual(names, ["Gajar Halwa", "Gulab Jamun", "Kaju Katli"])
+
+    def test_sort_by_price_descending(self):
+        sweets = self.shop.sort_sweets(sort_by="price", ascending=False)
+        prices = [sweet.price for sweet in sweets]
+        self.assertListEqual(prices, [50, 30, 10])
+
+    def test_sort_by_quantity_ascending(self):
+        sweets = self.shop.sort_sweets(sort_by="quantity", ascending=True)
+        quantities = [sweet.quantity_in_stock for sweet in sweets]
+        self.assertListEqual(quantities, [15, 20, 50])
+
 if __name__ == "__main__":
     unittest.main()
