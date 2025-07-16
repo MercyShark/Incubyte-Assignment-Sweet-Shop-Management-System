@@ -75,5 +75,38 @@ class TestSweetShop_ViewSweets(unittest.TestCase):
         self.assertEqual(sweets[0].name, "Kaju Katli")
         self.assertEqual(sweets[1].name, "Gajar Halwa")
 
+
+class TestSweetShop_SearchSweets(unittest.TestCase):
+    def setUp(self):
+        """
+        Setup shop with example sweets for search tests:
+          - Kaju Katli (Nut-Based)
+          - Gajar Halwa (VegetableBased)
+          - Gulab Jamun (Milk-Based)
+        """
+        self.shop = SweetShop()
+        self.shop.add_sweet(Sweet(id=1001, name="Kaju Katli", category="Nut-Based", price=50, quantity_in_stock=20))
+        self.shop.add_sweet(Sweet(id=1002, name="Gajar Halwa", category="VegetableBased", price=30, quantity_in_stock=15))
+        self.shop.add_sweet(Sweet(id=1003, name="Gulab Jamun", category="Milk-Based", price=10, quantity_in_stock=50))
+
+    def test_search_by_name(self):
+        """Search sweets by partial name, case-insensitive."""
+        results = self.shop.search_sweets(name="gajar")
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].name, "Gajar Halwa")
+
+    def test_search_by_category(self):
+        """Search sweets by exact category."""
+        results = self.shop.search_sweets(category="Milk-Based")
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].name, "Gulab Jamun")
+
+    def test_search_by_price_range(self):
+        """Search sweets within given price range (inclusive)."""
+        results = self.shop.search_sweets(min_price=10, max_price=30)
+        self.assertEqual(len(results), 2)
+        found_names = sorted([sweet.name for sweet in results])
+        self.assertListEqual(found_names, ["Gajar Halwa", "Gulab Jamun"])
+
 if __name__ == "__main__":
     unittest.main()
