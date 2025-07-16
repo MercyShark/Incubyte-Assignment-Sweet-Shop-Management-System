@@ -78,3 +78,21 @@ class SweetShop:
 
 
 
+
+    def purchase_sweet(self, sweet_id: int, quantity: int):
+        """
+        Decrease quantity_in_stock of a sweet after purchase, ensuring stock sufficiency.
+        """
+        # Find sweet by ID
+        sweet = next((s for s in self._inventory if s.id == sweet_id), None)
+        if sweet is None:
+            raise ValueError(f"Sweet with ID {sweet_id} not found.")
+
+        # Ensure enough stock is available before purchase
+        if sweet.quantity_in_stock < quantity:
+            raise InsufficientStockError(
+                f"Not enough stock for sweet ID {sweet_id}. Requested {quantity}, available {sweet.quantity_in_stock}."
+            )
+
+        # Deduct purchased quantity
+        sweet.quantity_in_stock -= quantity
