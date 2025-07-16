@@ -1,3 +1,10 @@
+class InsufficientStockError(Exception):
+    """
+    Custom exception when purchase quantity exceeds stock.
+    """
+    pass
+
+
 class SweetShop:
     """
     Represents the sweet shop inventory and operations like adding, viewing, and deleting sweets.
@@ -68,3 +75,6 @@ class SweetShop:
             return self._inventory
 
         return sorted(self._inventory, key=key_func, reverse=not ascending)
+
+
+

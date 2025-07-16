@@ -1,5 +1,5 @@
 import unittest
-from sweets.shop import SweetShop
+from sweets.shop import SweetShop, InsufficientStockError
 from sweets.models import Sweet
 
 class TestSweetShop_AddSweet(unittest.TestCase):
@@ -119,7 +119,7 @@ class TestSweetShop_SortSweets(unittest.TestCase):
         - By price in descending order
         - By quantity in ascending order
         """
-        
+
         self.shop = SweetShop()
         self.shop.add_sweet(Sweet(id=1001, name="Kaju Katli", category="Nut-Based", price=50, quantity_in_stock=20))
         self.shop.add_sweet(Sweet(id=1002, name="Gajar Halwa", category="VegetableBased", price=30, quantity_in_stock=15))
@@ -139,6 +139,28 @@ class TestSweetShop_SortSweets(unittest.TestCase):
         sweets = self.shop.sort_sweets(sort_by="quantity", ascending=True)
         quantities = [sweet.quantity_in_stock for sweet in sweets]
         self.assertListEqual(quantities, [15, 20, 50])
+
+
+
+class TestSweetShop_PurchaseSweets(unittest.TestCase):
+    def setUp(self):
+        self.shop = SweetShop()
+        self.sweet = Sweet(id=1001, name="Kaju Katli", category="Nut-Based", price=50, quantity_in_stock=20)
+        self.shop.add_sweet(self.sweet)
+
+    def test_successful_purchase_decreases_stock(self):
+        """
+        Test that purchasing sweets decreases quantity_in_stock correctly.
+        """
+        self.shop.purchase_sweet(sweet_id=1001, quantity=5)
+        self.assertEqual(self.sweet.quantity_in_stock, 15)
+
+    def test_purchase_more_than_stock_raises_error(self):
+        """
+        Test that purchasing more than available stock raises InsufficientStockError.
+        """
+        with self.assertRaises(InsufficientStockError):
+            self.shop.purchase_sweet(sweet_id=1001, quantity=25)
 
 if __name__ == "__main__":
     unittest.main()
