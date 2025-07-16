@@ -50,3 +50,21 @@ class SweetShop:
             results = [s for s in results if s.price <= max_price]
 
         return results
+    
+
+    def sort_sweets(self, sort_by: str, ascending: bool = True):
+        """
+        Sort sweets by given attribute: 'name', 'price', or 'quantity'
+        """
+        key_func_map = {
+            'name': lambda s: s.name.lower(),           # case-insensitive sort by name
+            'price': lambda s: s.price,
+            'quantity': lambda s: s.quantity_in_stock,
+        }
+
+        key_func = key_func_map.get(sort_by)
+        if key_func is None:
+            # If invalid sort_by, return unsorted list (or raise error if you want stricter validation)
+            return self._inventory
+
+        return sorted(self._inventory, key=key_func, reverse=not ascending)
