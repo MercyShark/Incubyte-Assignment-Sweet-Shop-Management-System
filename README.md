@@ -1,5 +1,7 @@
 # 🍭 Incubyte Sweet Shop Management System
 
+🌐 **Live Demo**: [http://incubyte.g3e2brc9c4a4dqbu.centralindia.azurecontainer.io](http://incubyte.g3e2brc9c4a4dqbu.centralindia.azurecontainer.io)
+
 A **Test-Driven Development (TDD)** focused sweet shop inventory management system built with FastAPI. This project demonstrates clean code practices, comprehensive testing, and modern web development techniques.
 
 ## 🎯 TDD Focus & Development Approach
