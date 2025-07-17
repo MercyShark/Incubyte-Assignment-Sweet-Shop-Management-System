@@ -25,6 +25,19 @@ This project follows **Test-Driven Development (TDD)** methodology:
 - **Testing**: unittest, TDD methodology
 - **Containerization**: Docker
 
+## 📸 Screenshots
+
+### Main Inventory View
+![Sweet Shop Inventory](docs/image.png)
+
+### Add New Sweet Form
+![Add Sweet Form](docs/image-1.png)
+
+### Adding New Sweet
+![Purchase Restock Interface](docs/image-2.png)
+
+### Updated Sweet List
+![Updated Sweet List](docs/image-3.png)
 
 ## 🧪 Testing (TDD Focus)
 
@@ -70,17 +83,3 @@ docker run -p 8000:8000 sweet-shop
 ```
 
 **Access**: http://localhost:8000
-
-## 📸 Screenshots
-
-### Main Inventory View
-![Sweet Shop Inventory](docs/image.png)
-
-### Add New Sweet Form
-![Add Sweet Form](docs/image-1.png)
-
-### Adding New Sweet
-![Purchase Restock Interface](docs/image-2.png)
-
-### Updated Sweet List
-![FastAPI Auto Documentation](docs/image-3.png)
